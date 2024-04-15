@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- round_button_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <!-- Use the same button color with reduced alpha -->
+    <solid android:color="#80F82C73" /> <!-- Adjust the alpha value (80) as needed -->
+</shape>
+
