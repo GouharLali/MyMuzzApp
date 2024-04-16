@@ -3,5 +3,5 @@
     <corners android:radius="20dp" />
     <stroke
         android:width="2dp"
-        android:color="@color/outline_color" /> <!-- Use the default stroke color -->
+        android:color="@color/outline_color" />
 </shape>
