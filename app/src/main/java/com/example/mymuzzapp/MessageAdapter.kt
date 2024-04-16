@@ -17,14 +17,16 @@ import java.util.Date
 import java.util.Locale
 
 class MessageAdapter(
-    private val dataMessages: List<DataMessage>,
-    private val context: Context
+    private val context: Context,
+    private var messages: List<MessageEntity> = emptyList()
+
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    companion object {
-        private const val VIEW_TYPE_HEADER = 0
-        private const val VIEW_TYPE_MESSAGE = 1
+    fun setData(messages: List<MessageEntity>) {
+        this.messages = messages
+        notifyDataSetChanged()
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -48,11 +50,11 @@ class MessageAdapter(
                 // Bind data for header view if needed
             }
             is MessageViewHolder -> {
-                val message = dataMessages[position - 1] // Subtract 1 to adjust for header
+                val message = messages[position - 1] // Subtract 1 to adjust for header
                 holder.bind(message)
 
                 if (position > 1) {
-                    val previousMessage = dataMessages[position - 2]
+                    val previousMessage = messages[position - 2]
                     if (shouldShowDateDelayed(previousMessage, message)) {
                         holder.showDate(message.timestamp)
                     } else {
@@ -66,16 +68,16 @@ class MessageAdapter(
     }
 
     private fun shouldShowDateDelayed(
-        previousDataMessage: DataMessage,
-        currentDataMessage: DataMessage
+        previousDataMessage: MessageEntity,
+        currentDataMessage: MessageEntity
     ): Boolean {
         val difference = currentDataMessage.timestamp.time - previousDataMessage.timestamp.time
         val hoursDifference = difference / 3600000
-        return hoursDifference >= 1 || currentDataMessage.dayTimestamp != previousDataMessage.dayTimestamp
+        return hoursDifference >= 1 || currentDataMessage.timestamp.time / (1000 * 60 * 60 * 24) != previousDataMessage.timestamp.time / (1000 * 60 * 60 * 24)
     }
 
     override fun getItemCount(): Int {
-        return dataMessages.size + 1
+        return messages.size + 1
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -98,18 +100,18 @@ class MessageAdapter(
         private val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         private val tickImageView: ImageView = itemView.findViewById(R.id.tickImageView)
 
-        fun bind(dataMessage: DataMessage) {
+        fun bind(message: MessageEntity) {
             leftChatLayout.visibility = View.GONE
             rightChatLayout.visibility = View.GONE
 
-            if (dataMessage.sender == "sender") {
+            if (message.sender == "sender") {
                 leftChatLayout.visibility = View.VISIBLE
-                leftChatTextView.text = dataMessage.text
-                tickImageView.visibility = if (dataMessage.isRead) View.VISIBLE else View.GONE
-                tickImageView.setImageResource(if (dataMessage.isRead) R.drawable.tick_gold else R.drawable.tick_grey)
+                leftChatTextView.text = message.text
+                tickImageView.visibility = if (message.isRead) View.VISIBLE else View.GONE
+                tickImageView.setImageResource(if (message.isRead) R.drawable.tick_gold else R.drawable.tick_grey)
             } else {
                 rightChatLayout.visibility = View.VISIBLE
-                rightChatTextView.text = dataMessage.text
+                rightChatTextView.text = message.text
                 tickImageView.visibility = View.GONE
             }
         }
@@ -129,5 +131,10 @@ class MessageAdapter(
         fun hideDate() {
             dateTextView.visibility = View.GONE
         }
+    }
+
+    companion object {
+        private const val VIEW_TYPE_HEADER = 0
+        private const val VIEW_TYPE_MESSAGE = 1
     }
 }
