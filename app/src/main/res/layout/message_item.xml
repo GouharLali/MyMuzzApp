@@ -20,7 +20,7 @@
     <View
         android:id="@+id/spacing_view"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
+        android:layout_height="10dp"
         android:layout_below="@id/dateTextView"
         android:visibility="gone" />
 
@@ -30,9 +30,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/spacing_view"
         android:layout_marginEnd="80dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/bubble_bg_sent"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/left_chat_textview"
@@ -61,7 +63,7 @@
         android:layout_marginStart="80dp"
         android:background="@drawable/bubble_bg_received"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/right_chat_textview"

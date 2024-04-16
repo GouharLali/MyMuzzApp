@@ -130,7 +130,6 @@ class MessageAdapter(
         }
 
         fun showSpacing() {
-            spacingView.layoutParams.height = messageSpacingHeight
             spacingView.visibility = View.VISIBLE
         }
 
@@ -165,14 +164,14 @@ class MessageAdapter(
         currentDataMessage: MessageEntity
     ): Boolean {
         val difference = currentDataMessage.timestamp.time - previousDataMessage.timestamp.time
-        val hoursDifference = difference / 3600000
-        return hoursDifference >= 1 || currentDataMessage.timestamp.time / (1000 * 60 * 60 * 24) != previousDataMessage.timestamp.time / (1000 * 60 * 60 * 24)
+        val minutesDifference = difference / (1000 * 60) // Convert milliseconds to minutes
+        return minutesDifference >= 2
     }
+
 
     companion object {
         private const val VIEW_TYPE_HEADER = 0
         private const val VIEW_TYPE_MESSAGE = 1
         private const val firstMessageSpacingHeight = 50
-        private const val messageSpacingHeight = 20
     }
 }
