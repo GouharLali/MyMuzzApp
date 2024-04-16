@@ -24,10 +24,6 @@ To get started with this project, follow these steps:
 The application follows the Model-View-ViewModel (MVVM) architecture pattern to separate concerns between UI, data, and business logic. 
 This architecture enhances maintainability and testability.
 
-## Database
-Room Persistence Library is used for local storage, providing an abstraction layer over SQLite. 
-This choice simplifies database operations and ensures data persistence across app sessions.
-
 ## UI Components
 - **RecyclerView**: RecyclerView is utilized to display chat messages efficiently. 
 - Its flexible architecture allows for smooth scrolling and optimal performance, even with large datasets.
