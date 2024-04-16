@@ -27,7 +27,6 @@ class MessageAdapter(
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
@@ -53,6 +52,23 @@ class MessageAdapter(
                 val message = messages[position - 1] // Subtract 1 to adjust for header
                 holder.bind(message)
 
+                if (position == 1) {
+                    holder.showFirstMessageSpacing()
+                } else {
+                    val previousMessage = messages[position - 2]
+                    val currentMessage = message
+                    val sameUser = previousMessage.sender == currentMessage.sender
+                    val timeDifference =
+                        (currentMessage.timestamp.time - previousMessage.timestamp.time) / 1000
+                    val lessThan20Seconds = timeDifference < 20
+
+                    if (sameUser && lessThan20Seconds) {
+                        holder.showSpacing()
+                    } else {
+                        holder.hideSpacing()
+                    }
+                }
+
                 if (position > 1) {
                     val previousMessage = messages[position - 2]
                     if (shouldShowDateDelayed(previousMessage, message)) {
@@ -65,15 +81,6 @@ class MessageAdapter(
                 }
             }
         }
-    }
-
-    private fun shouldShowDateDelayed(
-        previousDataMessage: MessageEntity,
-        currentDataMessage: MessageEntity
-    ): Boolean {
-        val difference = currentDataMessage.timestamp.time - previousDataMessage.timestamp.time
-        val hoursDifference = difference / 3600000
-        return hoursDifference >= 1 || currentDataMessage.timestamp.time / (1000 * 60 * 60 * 24) != previousDataMessage.timestamp.time / (1000 * 60 * 60 * 24)
     }
 
     override fun getItemCount(): Int {
@@ -99,6 +106,7 @@ class MessageAdapter(
         private val rightChatTextView: TextView = itemView.findViewById(R.id.right_chat_textview)
         private val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         private val tickImageView: ImageView = itemView.findViewById(R.id.tickImageView)
+        private val spacingView: View = itemView.findViewById(R.id.spacing_view)
 
         fun bind(message: MessageEntity) {
             leftChatLayout.visibility = View.GONE
@@ -116,6 +124,20 @@ class MessageAdapter(
             }
         }
 
+        fun showFirstMessageSpacing() {
+            spacingView.layoutParams.height = firstMessageSpacingHeight
+            spacingView.visibility = View.VISIBLE
+        }
+
+        fun showSpacing() {
+            spacingView.layoutParams.height = messageSpacingHeight
+            spacingView.visibility = View.VISIBLE
+        }
+
+        fun hideSpacing() {
+            spacingView.visibility = View.GONE
+        }
+
         fun showDate(timestamp: Date) {
             dateTextView.visibility = View.VISIBLE
             val dateFormat = SimpleDateFormat("EEEE HH:mm", Locale.getDefault())
@@ -124,7 +146,12 @@ class MessageAdapter(
             val date = dateAndTime[0]
             val time = dateAndTime[1]
             val spannableDate = SpannableString(formattedDate)
-            spannableDate.setSpan(StyleSpan(Typeface.BOLD), 0, date.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableDate.setSpan(
+                StyleSpan(Typeface.BOLD),
+                0,
+                date.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             dateTextView.text = spannableDate
         }
 
@@ -133,8 +160,19 @@ class MessageAdapter(
         }
     }
 
+    private fun shouldShowDateDelayed(
+        previousDataMessage: MessageEntity,
+        currentDataMessage: MessageEntity
+    ): Boolean {
+        val difference = currentDataMessage.timestamp.time - previousDataMessage.timestamp.time
+        val hoursDifference = difference / 3600000
+        return hoursDifference >= 1 || currentDataMessage.timestamp.time / (1000 * 60 * 60 * 24) != previousDataMessage.timestamp.time / (1000 * 60 * 60 * 24)
+    }
+
     companion object {
         private const val VIEW_TYPE_HEADER = 0
         private const val VIEW_TYPE_MESSAGE = 1
+        private const val firstMessageSpacingHeight = 50
+        private const val messageSpacingHeight = 20
     }
 }
