@@ -164,8 +164,8 @@ class MessageAdapter(
         currentDataMessage: MessageEntity
     ): Boolean {
         val difference = currentDataMessage.timestamp.time - previousDataMessage.timestamp.time
-        val minutesDifference = difference / (1000 * 60) // Convert milliseconds to minutes
-        return minutesDifference >= 2
+        val minutesDifference = difference / (1000 * 60)
+        return minutesDifference >= 60
     }
 
 
