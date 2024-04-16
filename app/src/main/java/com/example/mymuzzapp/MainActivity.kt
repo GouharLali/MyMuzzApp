@@ -19,12 +19,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var messageViewModel: MessageViewModel
 
     private val otherUserResponses = arrayOf(
-        "Hello!",
-        "How are you?",
-        "Nice to meet you!",
-        "What's up?",
-        "I'm here!",
-        "Tell me more."
+        "Wowsa sounds fun",
+        "Yeh for sure that works. what time do you think?",
+        "Ok cool",
+        "Nothing much",
+        "Actually just about to go shopping, got any recommendations for a good shoe shop? I'm a fashion disaster",
+        "The last one went on for hours."
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
