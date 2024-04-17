@@ -14,6 +14,9 @@ MyMuzzApp is a messaging app developed using Android and Kotlin.
 
 <img src="https://github.com/GouharLali/MyMuzzApp/assets/94018886/a86cec94-c737-48fe-9a8b-ed3e3ba8d4c4" alt="screenshotthree" width="200">
 
+[PDF outline implementation decisions.pdf](https://github.com/GouharLali/MyMuzzApp/files/15010425/PDF.outline.implementation.decisions.pdf)
+
+
 ## Getting Started
 To get started with this project, follow these steps:
 1. Clone this repository.
